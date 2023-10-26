@@ -1,0 +1,23 @@
+sub_field,sub_label,sub_varname
+Make a general comment,General comment,general_comment
+Automated Transcription,Transcription,transcription
+"Do you agree with the definitions in this discussion paper? If not, what definitions do you prefer and why?",Q01 Definitions,q01_definitions
+What potential risks from AI are not covered by Australia’s existing regulatory approaches? Do you have suggestions for possible regulatory action to mitigate these risks?,Q02 Other AI risks and recommendations for regulation,q02_ai_risks_regulation
+Are there any further non-regulatory initiatives the Australian Government could implement to support responsible AI practices in Australia? Please describe these and their benefits or impacts.,Q03 Non-regulatory actions to address AI risks,q03_non_regulatory_initiatives
+Do you have suggestions on coordination of AI governance across government? Please outline the goals that any coordination mechanisms could achieve and how they could influence the development and uptake of AI in Australia.,Q04 Coordinating AI governance across government,q04_govt_coordination
+"Are there any governance measures being taken or considered by other countries (including any not discussed in this paper) that are relevant, adaptable and desirable for Australia?",Q05 International models for AI governance,q05_international_approaches
+"Should different approaches apply to public and private sector use of AI technologies? If so, how should the approaches differ?",Q06 Public vs Private sector governance,q06_public_private
+How can the Australian Government further support responsible AI practices in its own agencies?,Q07 Responsible government use of AI,q07_govt_responsible_ai
+In what circumstances are generic solutions to the risks of AI most valuable? And in what circumstances are technology-specific solutions better? Please provide some examples.,Q08 Generic vs technology-specific approaches for AI risk,q08_generic_vs_specific
+"Given the importance of transparency across the AI lifecycle, please share your thoughts on:",Q09 Transparency requirements and scope,q09_transparency
+Do you have suggestions for:,Q10 Ban on high-risk AI applications,q10_ban_highrisk_ai
+What initiatives or government action can increase public trust in AI deployment to encourage more people to use AI?,Q11 Actions to increase public trust in AI,q11_public_trust
+How would banning high-risk activities (like social scoring or facial recognition technology in certain circumstances) impact Australia’s tech sector and our trade and exports with other countries?,Q12 Trade impact of banning high-risk AI applications,q12_trade_impact
+What changes (if any) to Australian conformity infrastructure might be required to support assurance processes to mitigate against potential AI risks?,Q13 Changes to conformity infrastructure,q13_conformity_infra
+"Do you support a risk-based approach for addressing potential AI risks? If not, is there a better approach?",Q14 Risk-based approach to address AI risks,q14_risk_based_approach
+What do you see as the main benefits or limitations of a risk-based approach? How can any limitations be overcome?,Q15 Benefits and limitations of risk-based approach,q15_risk_approach_limitations
+"Is a risk-based approach better suited to some sectors, AI applications or organisations than others based on organisation size, AI maturity and resources?",Q16 Scope and application of risk-based approach,q16_risk_approach_scope
+What elements should be in a risk-based approach for addressing potential AI risks? Do you support the elements presented in Attachment C?,Q17 Elements to include in risk-based approach,q17_risk_approach_elements
+How can an AI risk-based approach be incorporated into existing assessment frameworks (like privacy) or risk management processes to streamline and reduce potential duplication?,Q18 Integration of risk-based approach into existing frameworks,q18_integration_into_frameworks
+"How might a risk-based approach apply to general purpose AI systems, such as large language models (LLMs) or multimodal foundation models (MFMs)?",Q19 Application of risk-based approach to general purpose AI,q19_general_purpose_ai
+Should a risk-based approach for responsible AI be a voluntary or self-regulation tool or be mandated through regulation? And should it apply to:,Q20 Voluntary vs mandated compliance with risk-based approach,q20_voluntary_vs_mandated
