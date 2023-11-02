@@ -1,7 +1,15 @@
+# Safe and Responsible AI analysis ----------------------------------------
+# 
+# Author: Alexander Saeri (alexander@aksaeri.com)
+
+
+# # Startup ---------------------------------------------------------------
+
 library(tidyverse)
 library(janitor)
 
 d_lookup <- read_csv("/cloud/project/code/lookup.csv")
+d <- readxl::read_xlsx("/cloud/project/data/safe_responsible_ai.xlsx")
 
 questions_escaped <- d_lookup$sub_field %>% 
   str_replace_all("\\s+", " ") %>% 
@@ -31,7 +39,6 @@ split_sub_value <- function(x) {
 # # Code ------------------------------------------------------------------
 
 
-d <- readxl::read_xlsx("/cloud/data/safe_responsible_ai.xlsx")
 
 # remove unnecessary columns and update format for submission number and date
 d <- d %>% 
@@ -99,13 +106,17 @@ d_wide <- d %>%
     written_submission,
     general_comment, 
     transcription_1, transcription_2, transcription_3, # Assuming there's a transcription_3, include it
-    var_names[3:22], # Select columns starting with 'q' based on the order in 'var_names'
+    d_lookup$sub_varname[3:22], # Select columns starting with 'q' based on the order in 'var_names'
     everything() # Include any remaining columns
   )
 
-write_csv(d, "srai_full.csv", na = "")
-write_csv(d_short, "srai_shortened.csv", na = "")
-write_csv(d_wide, "srai_wide_questions.csv", na = "")
+write_rds(d, "/cloud/project/data/output/srai_full.rds")
+write_csv(d, "/cloud/project/data/output/srai_full.csv", na = "")
+write_csv(d_short, "/cloud/project/data/output/srai_shortened.csv", na = "")
+write_csv(d_wide, "/cloud/project/data/output/srai_wide_questions.csv", na = "")
+
+
+# # Additional analyses ---------------------------------------------------
 
 # identify any submission fields with specific words and flag them.
 d %>% 
@@ -113,27 +124,44 @@ d %>%
   group_by(sub_num) %>%
   summarise(risk = ifelse(
     any(str_detect(
-      sub_value, "catastrophic risk|existential risk"), na.rm = TRUE) == TRUE, 1, 0)) %>% 
-  write_csv(., "catrisk.csv", na = "")
+      sub_value, "catastrophic risk|existential risk"), na.rm = TRUE) == TRUE, 1, 0))
 
 
-extract_context <- function(string, keyword_pattern, n_words = 25) {
-  pattern <- sprintf("\\b(?:\\w+\\W+){0,%s}(%s)\\W+(?:\\w+\\W+){0,%s}\\b", n_words, keyword_pattern, n_words)
-  matches <- str_extract_all(string, pattern)
-  paste(matches[[1]], collapse = " ; ")
-}
 
-d_test <-   d %>% 
-  filter(str_detect(sub_value, "catastrophic risk|existential risk")) %>% 
-  filter(!sub_label == "Transcription") %>% 
-  slice_head(n = 10) %>% 
-  select(sub_varname, sub_value)
+# Define a regular expression for an email address
+email_regex <- "[[:alnum:]_.]+@[[:alnum:]_.]+\\.[[:alnum:]_.]{2,}"
+email_to_remove <- "digitaleconomy@industry.gov.au"
 
-d_test %>% 
-  mutate(context = extract_context(sub_value, "catastrophic risk|existential risk")) 
+# Use mutate along with rowwise to extract all email addresses
+d_emails <- d %>%
+  filter(sub_varname == "transcription") %>% 
+  rowwise() %>%
+  mutate(emails = list(str_extract_all(sub_value, email_regex))) %>% 
+  mutate(emails = map_chr(emails, ~paste(.x, collapse = ", "))) %>% 
+  # Remove the specific email address
+  mutate(emails = str_replace_all(emails, regex(email_to_remove, ignore_case = TRUE), "")) %>%
+  # Remove any trailing commas left after the email removal
+  mutate(emails = str_replace_all(emails, "\\s*,\\s*,", ", ")) %>%
+  # Trim whitespace which may be left at the start or end of the string
+  mutate(emails = str_trim(emails)) %>% 
+  group_by(sub_num) %>%
+  summarise(all_emails = paste(unique(emails), collapse = ", ")) %>%
+  ungroup()
 
-  # filter(str_detect(sub_value, "catastrophic risk|existential risk")) %>% 
-  mutate(context = extract_context(sub_value, "catastrophic risk|existential risk")) %>% 
-  # filter(!is.na(context)) %>% 
-  # select(context)
+
+# get_risk_context <- function(string, pattern, n_words = 10) {
+#   full_pattern <- paste0("([^\\s]+\\s+){",n_words,"}",pattern,"(\\s+[^\\s]+){",n_words,"}")
+#   str_extract_all(string, full_pattern)
+# }
+
+# d_test <- d %>% 
+#   filter(str_detect(sub_value, "catastrophic risk|existential risk")) %>% 
+#   filter(!sub_label == "Transcription") %>% 
+#   slice_head(n = 10) %>% 
+#   select(sub_varname, sub_value)
 # 
+# d_test %>% 
+#   mutate(context = str_extract(sub_value, paste0("(\\w+){",10,"}","catastrophic risk","(\\w+){",10,"}")))
+# 
+# d_test %>% 
+#   mutate(context = get_risk_context(sub_value, "catastrophic risk|existential risk")) %>% select(context)
